@@ -21,12 +21,10 @@ import java.util.ArrayList;
 public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.ViewHolder> {
 
     private ArrayList<GitIssue> mIssues;
-    private Context mContext;
     AlertDialog.Builder commentsBuilder;
 
-    public IssuesViewAdapter(Context mContext, ArrayList<GitIssue> list) {
+    public IssuesViewAdapter(ArrayList<GitIssue> list) {
         this.mIssues = list;
-        this.mContext = mContext;
     }
 
 
@@ -45,7 +43,8 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Vi
 
         @Override
         public void onClick(View v) {
-            Log.d("DEBUG_TAG", "ITEM " + getAdapterPosition() + " HAS BEEN CLICKED");
+            // For tesing purposes
+//            Log.d("DEBUG_TAG", "ITEM " + getAdapterPosition() + " HAS BEEN CLICKED");
 
             String message = "";
             for (int i = 0; i < mIssues.get(getAdapterPosition()).getCommentsList().size(); i++) {

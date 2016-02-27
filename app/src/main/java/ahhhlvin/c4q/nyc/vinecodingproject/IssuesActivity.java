@@ -49,7 +49,7 @@ public class IssuesActivity extends AppCompatActivity {
 
 
         if (issuesList != null) {
-            mAdapter = new IssuesViewAdapter(getApplicationContext(), issuesList);
+            mAdapter = new IssuesViewAdapter(issuesList);
             issuesView.setAdapter(mAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), 1, false);
             issuesView.setLayoutManager(linearLayoutManager);
@@ -116,7 +116,7 @@ public class IssuesActivity extends AppCompatActivity {
 
                 URL endpointUrl = new URL(url);
                 conn = (HttpURLConnection) endpointUrl.openConnection();
-                conn.setRequestMethod("GET");
+                conn.setRequestMethod(REQUEST_METHOD_GET);
                 conn.setDoInput(true);
 
                 conn.connect();
