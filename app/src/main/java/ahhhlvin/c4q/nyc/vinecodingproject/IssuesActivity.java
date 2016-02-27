@@ -135,7 +135,7 @@ public class IssuesActivity extends AppCompatActivity {
                             JSONObject commentObj = commentsArray.getJSONObject(j);
 
                             IssueComment comment = new IssueComment();
-                            comment.setBody(commentObj.getJSONObject("user").getString("login") + "\n\n" + commentObj.getString("body") + "\n\n\n");
+                            comment.setBody("Posted by: " + commentObj.getJSONObject("user").getString("login").toUpperCase() + "\n\n" + commentObj.getString("body") + "\n\n\n");
                             issue.commentsList.add(comment);
                         }
 

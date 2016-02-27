@@ -41,15 +41,22 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Vi
             // For tesing purposes
 //            Log.d("DEBUG_TAG", "ITEM " + getAdapterPosition() + " HAS BEEN CLICKED");
 
-            String message = "";
-            for (int i = 0; i < mIssues.get(getAdapterPosition()).getCommentsList().size(); i++) {
-                message += mIssues.get(getAdapterPosition()).getCommentsList().get(i).getBody() + "\n";
-            }
+            if (mIssues.get(getAdapterPosition()).getCommentsList().size() > 0) {
+                String message = "";
+                for (int i = 0; i < mIssues.get(getAdapterPosition()).getCommentsList().size(); i++) {
+                    message += mIssues.get(getAdapterPosition()).getCommentsList().get(i).getBody() + "\n";
+                }
 
-            commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
-            commentsBuilder.setMessage(message);
-            commentsBuilder.setCancelable(true);
-            commentsBuilder.create().show();
+                commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
+                commentsBuilder.setMessage(message);
+                commentsBuilder.setCancelable(true);
+                commentsBuilder.create().show();
+            } else {
+                commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
+                commentsBuilder.setMessage("No comments available for issue");
+                commentsBuilder.setCancelable(true);
+                commentsBuilder.create().show();
+            }
         }
     }
 
