@@ -66,45 +66,6 @@ public class IssuesActivity extends AppCompatActivity {
     // Retrieves issues JSON on separate thread
     private class getIssues extends AsyncTask<Void, Void, ArrayList<GitIssue>> {
 
-        @Override
-        protected ArrayList<GitIssue> doInBackground(Void... arg0) {
-
-
-            try {
-                JSONArray issueArray = new JSONArray(run(ENDPOINT));
-
-                for (int i = 0; i < issueArray.length(); i++) {
-                    JSONObject issueObj = issueArray.getJSONObject(i);
-
-                    GitIssue issue = new GitIssue();
-                    issue.setIssueTitle(issueObj.get("title").toString());
-                    issue.setIssueBody(issueObj.get("body").toString() + "\n\n");
-
-
-                    JSONArray commentsArray = new JSONArray(run(issueObj.get("comments_url").toString()));
-                    if (commentsArray.length() > 0) {
-                        for (int j = 0; j < commentsArray.length(); j++) {
-                            JSONObject commentObj = commentsArray.getJSONObject(j);
-
-                            IssueComment comment = new IssueComment();
-                            comment.setBody(commentObj.getJSONObject("user").getString("login") + "\n\n" + commentObj.getString("body") + "\n\n\n");
-                            issue.commentsList.add(comment);
-                        }
-
-                    }
-
-                    issuesList.add(issue);
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e("ServiceHandler", "Error retrieving data from URL");
-            }
-
-            return issuesList;
-        }
-
 
         String run(String url) throws IOException {
 
@@ -148,6 +109,48 @@ public class IssuesActivity extends AppCompatActivity {
             }
             br.close();
             return sb.toString();
+        }
+
+
+
+
+        @Override
+        protected ArrayList<GitIssue> doInBackground(Void... arg0) {
+
+
+            try {
+                JSONArray issueArray = new JSONArray(run(ENDPOINT));
+
+                for (int i = 0; i < issueArray.length(); i++) {
+                    JSONObject issueObj = issueArray.getJSONObject(i);
+
+                    GitIssue issue = new GitIssue();
+                    issue.setIssueTitle(issueObj.get("title").toString());
+                    issue.setIssueBody(issueObj.get("body").toString() + "\n\n");
+
+
+                    JSONArray commentsArray = new JSONArray(run(issueObj.get("comments_url").toString()));
+                    if (commentsArray.length() > 0) {
+                        for (int j = 0; j < commentsArray.length(); j++) {
+                            JSONObject commentObj = commentsArray.getJSONObject(j);
+
+                            IssueComment comment = new IssueComment();
+                            comment.setBody(commentObj.getJSONObject("user").getString("login") + "\n\n" + commentObj.getString("body") + "\n\n\n");
+                            issue.commentsList.add(comment);
+                        }
+
+                    }
+
+                    issuesList.add(issue);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("ServiceHandler", "Error retrieving data from URL");
+            }
+
+            return issuesList;
         }
 
 
