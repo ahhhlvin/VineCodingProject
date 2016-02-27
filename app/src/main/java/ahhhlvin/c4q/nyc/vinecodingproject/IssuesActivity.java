@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,16 +22,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class IssuesActivity extends AppCompatActivity {
 
-    private static final String endpoint = "https://api.github.com/repos/rails/rails/issues";
+    private static final String REQUEST_METHOD_GET = "GET";
+    private static final String ENDPOINT = "https://api.github.com/repos/rails/rails/issues";
     ArrayList<GitIssue> issuesList;
     RecyclerView issuesView;
     IssuesViewAdapter mAdapter;
+
+    String result = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,104 +66,88 @@ public class IssuesActivity extends AppCompatActivity {
     // Retrieves issues JSON on separate thread
     private class getIssues extends AsyncTask<Void, Void, ArrayList<GitIssue>> {
 
-        OkHttpClient client = new OkHttpClient();
-
-
-        String run(String url) throws IOException {
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        }
-
-
-
-
         @Override
         protected ArrayList<GitIssue> doInBackground(Void... arg0) {
 
+
             try {
-//                JSONArray issuesArray = new JSONArray(run(endpoint));
-
-
-//            InputStream is = null;
-//
-//            try {
-//                URL endpointUrl = new URL(endpoint);
-//                HttpURLConnection conn = (HttpURLConnection) endpointUrl.openConnection();
-//                conn.setReadTimeout(10000 /* milliseconds */);
-//                conn.setConnectTimeout(15000 /* milliseconds */);
-//                conn.setRequestMethod("GET");
-//                conn.setDoInput(true);
-//                // Starts the query
-//                conn.connect();
-//                int response = conn.getResponseCode();
-//                Log.d("DEBUG_TAG", "The response is: " + response);
-//                is = conn.getInputStream();
-//
-//
-//
-//                BufferedReader r = new BufferedReader(new InputStreamReader(is));
-//                StringBuilder total = new StringBuilder();
-//                String contentAsString;
-//                try {
-//                    while ((contentAsString = r.readLine()) != null) {
-//                        total.append(contentAsString);
-//                    }
-//
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                //TODO: FIX!!
-//                if (is != null) {
-//                    is.close();
-//                }
-
-                // Convert the InputStream into a string
-
-//                return contentAsString;
-
-                // Makes sure that the InputStream is closed after the app is
-                // finished using it.
-
-                JSONArray issueArray = new JSONArray(run(endpoint));
+                JSONArray issueArray = new JSONArray(run(ENDPOINT));
 
                 for (int i = 0; i < issueArray.length(); i++) {
                     JSONObject issueObj = issueArray.getJSONObject(i);
 
                     GitIssue issue = new GitIssue();
                     issue.setIssueTitle(issueObj.get("title").toString());
-                    issue.setIssueBody(issueObj.get("body").toString());
+                    issue.setIssueBody(issueObj.get("body").toString() + "\n\n");
 
-//                    JSONArray commentsArray = new JSONArray(run(issueObj.get("comments_url").toString()));
 
-//                   for (int j = 0; j < commentsArray.length(); j++) {
+                    JSONArray commentsArray = new JSONArray(run(issueObj.get("comments_url").toString()));
+                    if (commentsArray.length() > 0) {
+                        for (int j = 0; j < commentsArray.length(); j++) {
+                            JSONObject commentObj = commentsArray.getJSONObject(j);
 
-//                       JSONObject commentObj = commentsArray.getJSONObject(j);
+                            IssueComment comment = new IssueComment();
+                            comment.setBody(commentObj.getJSONObject("user").getString("login") + "\n\n" + commentObj.getString("body") + "\n\n\n");
+                            issue.commentsList.add(comment);
+                        }
 
-                    for (int k = 0; k < 10; k++) {
-                       IssueComment comment = new IssueComment();
-//                       comment.setBody(commentObj.getJSONObject("user").getString("login") + "\n" + commentObj.getString("body") + "\n\n");
-                        comment.setBody("ahhhlvin" + "\n" + "a;sdlkfd;fjdsl;jfl;sdjfldjf;sdjfl;djf;jd;fds" + "\n\n");
-                       issue.commentsList.add(comment);
-                   }
+                    }
 
                     issuesList.add(issue);
 
                 }
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                Log.e("ServiceHandler", "Error retrieving data from endpoint");
+                Log.e("ServiceHandler", "Error retrieving data from URL");
             }
 
             return issuesList;
+        }
+
+
+        String run(String url) throws IOException {
+
+            InputStream is = null;
+            HttpURLConnection conn = null;
+
+
+            try {
+
+                URL endpointUrl = new URL(url);
+                conn = (HttpURLConnection) endpointUrl.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+
+                conn.connect();
+                int response = conn.getResponseCode();
+                Log.d("DEBUG_TAG", "The response is: " + response);
+                is = conn.getInputStream();
+                result = InputStreamToString(is);
+                is.close();
+
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
+
+                if (is != null) {
+                    is.close();
+                }
+            }
+
+            return result;
+        }
+
+        private String InputStreamToString(InputStream is) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            return sb.toString();
         }
 
 

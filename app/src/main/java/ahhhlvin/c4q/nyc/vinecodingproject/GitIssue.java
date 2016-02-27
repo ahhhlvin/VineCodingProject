@@ -12,6 +12,7 @@ public class GitIssue {
     ArrayList<IssueComment> commentsList;
 
     public GitIssue() {
+        commentsList = new ArrayList<>();
     }
 
     public GitIssue(String issueTitle, String issueBody) {
