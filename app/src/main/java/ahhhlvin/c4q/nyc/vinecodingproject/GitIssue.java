@@ -7,36 +7,36 @@ import java.util.ArrayList;
  */
 public class GitIssue {
 
-    String issueTitle;
-    String issueBody;
-    ArrayList<IssueComment> commentsList;
+    String mIssueTitle;
+    String mIssueBody;
+    ArrayList<IssueComment> mCommentsList;
 
     public GitIssue() {
-        commentsList = new ArrayList<>();
+        mCommentsList = new ArrayList<>();
     }
 
     public GitIssue(String issueTitle, String issueBody) {
-        this.issueTitle = issueTitle;
-        this.issueBody = issueBody;
+        this.mIssueTitle = issueTitle;
+        this.mIssueBody = issueBody;
     }
 
-    public String getIssueTitle() {
-        return issueTitle;
+    public String getmIssueTitle() {
+        return mIssueTitle;
     }
 
-    public void setIssueTitle(String issueTitle) {
-        this.issueTitle = issueTitle;
+    public void setmIssueTitle(String mIssueTitle) {
+        this.mIssueTitle = mIssueTitle;
     }
 
-    public String getIssueBody() {
-        return issueBody;
+    public String getmIssueBody() {
+        return mIssueBody;
     }
 
-    public void setIssueBody(String issueBody) {
-        this.issueBody = issueBody;
+    public void setmIssueBody(String mIssueBody) {
+        this.mIssueBody = mIssueBody;
     }
 
-    public ArrayList<IssueComment> getCommentsList() {
-        return commentsList;
+    public ArrayList<IssueComment> getmCommentsList() {
+        return mCommentsList;
     }
 }
