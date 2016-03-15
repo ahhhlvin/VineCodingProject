@@ -1,15 +1,16 @@
 package ahhhlvin.c4q.nyc.vinecodingproject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alvin2 on 2/25/16.
  */
 public class GitIssue {
 
-    String mIssueTitle;
-    String mIssueBody;
-    ArrayList<IssueComment> mCommentsList;
+    private String mIssueTitle;
+    private String mIssueBody;
+    List<IssueComment> mCommentsList;
 
     public GitIssue() {
         mCommentsList = new ArrayList<>();
@@ -36,7 +37,7 @@ public class GitIssue {
         this.mIssueBody = mIssueBody;
     }
 
-    public ArrayList<IssueComment> getmCommentsList() {
+    public List<IssueComment> getmCommentsList() {
         return mCommentsList;
     }
 }

@@ -21,13 +21,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class IssuesActivity extends AppCompatActivity {
 
     private static final String REQUEST_METHOD_GET = "GET";
     private static final String ENDPOINT = "https://api.github.com/repos/rails/rails/issues";
-    private ArrayList<GitIssue> mIssuesList;
-    private RecyclerView mIssuesView;
+    private List<GitIssue> mListIssues;
+    private RecyclerView mRecyclerViewIssues;
     private IssuesViewAdapter mAdapter;
     private String mResult = null;
 
@@ -38,26 +39,26 @@ public class IssuesActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mIssuesList = new ArrayList<>();
-        mIssuesView = (RecyclerView) findViewById(R.id.issues_view);
+        mListIssues = new ArrayList<>();
+        mRecyclerViewIssues = (RecyclerView) findViewById(R.id.issues_view);
 
         new getIssues().execute();
 
-        if (mIssuesList != null) {
-            mAdapter = new IssuesViewAdapter(mIssuesList);
-            mIssuesView.setAdapter(mAdapter);
+        if (mListIssues != null) {
+            mAdapter = new IssuesViewAdapter(mListIssues);
+            mRecyclerViewIssues.setAdapter(mAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), 1, false);
-            mIssuesView.setLayoutManager(linearLayoutManager);
+            mRecyclerViewIssues.setLayoutManager(linearLayoutManager);
         }
 
 ////         FOR TESTING
 //        for (int j = 0; j < 15; j++) {
-//            mIssuesList.add(new GitIssue("Ahhhlvin", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et felis porttitor magna vestibulum placerat. Fusce vel iaculis quam, non suscipit nulla. Nunc commodo diam nec felis dignissim, vitae accumsan dolor pulvinar. Cras orci augue, ornare vel mauris sed, tempus cursus elit. Nullam id nisl in arcu fringilla cursus. Nullam ornare ipsum id enim gravida tincidunt. Integer eu dolor nec massa ultricies consequat. In dignissim odio quis gravida dictum. Donec accumsan fermentum diam, et molestie ligula varius eget. Nam dictum elementum tellus, et iaculis nulla scelerisque quis. Vestibulum et venenatis libero, eu commodo ante. Aenean et varius est. Suspendisse tincidunt, sem eu posuere suscipit, elit velit porttitor diam, ac porttitor magna magna et erat. Donec eleifend mauris et elit posuere scelerisque. Vivamus in commodo arcu. Proin accumsan risus nunc, quis ornare urna accumsan eget. Curabitur venenatis est vel augue dignissim, nec pellentesque mi posuere. Vestibulum consectetur nisi vel placerat scelerisque. Cras blandit luctus nibh, eget tristique ligula fermentum nec."));
+//            mListIssues.add(new GitIssue("Ahhhlvin", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et felis porttitor magna vestibulum placerat. Fusce vel iaculis quam, non suscipit nulla. Nunc commodo diam nec felis dignissim, vitae accumsan dolor pulvinar. Cras orci augue, ornare vel mauris sed, tempus cursus elit. Nullam id nisl in arcu fringilla cursus. Nullam ornare ipsum id enim gravida tincidunt. Integer eu dolor nec massa ultricies consequat. In dignissim odio quis gravida dictum. Donec accumsan fermentum diam, et molestie ligula varius eget. Nam dictum elementum tellus, et iaculis nulla scelerisque quis. Vestibulum et venenatis libero, eu commodo ante. Aenean et varius est. Suspendisse tincidunt, sem eu posuere suscipit, elit velit porttitor diam, ac porttitor magna magna et erat. Donec eleifend mauris et elit posuere scelerisque. Vivamus in commodo arcu. Proin accumsan risus nunc, quis ornare urna accumsan eget. Curabitur venenatis est vel augue dignissim, nec pellentesque mi posuere. Vestibulum consectetur nisi vel placerat scelerisque. Cras blandit luctus nibh, eget tristique ligula fermentum nec."));
 //        }
     }
 
     // Retrieves issues JSON on separate thread
-    private class getIssues extends AsyncTask<Void, Void, ArrayList<GitIssue>> {
+    private class getIssues extends AsyncTask<Void, Void, List<GitIssue>> {
 
         String run(String url) throws IOException {
             InputStream is = null;
@@ -98,11 +99,8 @@ public class IssuesActivity extends AppCompatActivity {
             return sb.toString();
         }
 
-
-
-
         @Override
-        protected ArrayList<GitIssue> doInBackground(Void... arg0) {
+        protected List<GitIssue> doInBackground(Void... arg0) {
 
             try {
                 JSONArray issueArray = new JSONArray(run(ENDPOINT));
@@ -122,7 +120,7 @@ public class IssuesActivity extends AppCompatActivity {
                                 issue.mCommentsList.add(comment);
                             }
                         }
-                        mIssuesList.add(issue);
+                        mListIssues.add(issue);
                     }
 
             } catch (JSONException e) {
@@ -130,14 +128,14 @@ public class IssuesActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e("ServiceHandler", "Error retrieving data from URL");
             }
-            return mIssuesList;
+            return mListIssues;
         }
 
 
         @Override
-        protected void onPostExecute(ArrayList<GitIssue> list) {
+        protected void onPostExecute(List<GitIssue> list) {
             super.onPostExecute(list);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.addIssues();
         }
     }
 
