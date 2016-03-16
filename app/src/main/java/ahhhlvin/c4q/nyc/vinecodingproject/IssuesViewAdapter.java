@@ -1,5 +1,6 @@
 package ahhhlvin.c4q.nyc.vinecodingproject;
 
+import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import java.util.List;
 public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.IssueViewHolder> {
 
     private List<GitIssue> mIssues;
+    private Context mContext;
 
-    public IssuesViewAdapter(List<GitIssue> list) {
+    public IssuesViewAdapter(List<GitIssue> list, Context context) {
         mIssues = list;
+        mContext = context;
     }
 
     public void addIssues() {
@@ -26,7 +29,7 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
 
     @Override
     public IssueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.issue_layout, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.issue_layout, parent, false);
         return new IssueViewHolder(v);
     }
 
@@ -58,8 +61,6 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
 
         @Override
         public void onClick(View v) {
-            // For testing purposes
-//            Log.d("DEBUG_TAG", "ITEM " + getAdapterPosition() + " HAS BEEN CLICKED");
             AlertDialog.Builder commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
             commentsBuilder.setCancelable(true);
 

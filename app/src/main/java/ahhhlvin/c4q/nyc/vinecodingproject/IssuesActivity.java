@@ -42,23 +42,18 @@ public class IssuesActivity extends AppCompatActivity {
         mListIssues = new ArrayList<>();
         mRecyclerViewIssues = (RecyclerView) findViewById(R.id.issues_view);
 
-        new getIssues().execute();
+        new GetDataTask().execute();
 
         if (mListIssues != null) {
-            mAdapter = new IssuesViewAdapter(mListIssues);
+            mAdapter = new IssuesViewAdapter(mListIssues, getApplicationContext());
             mRecyclerViewIssues.setAdapter(mAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(), 1, false);
             mRecyclerViewIssues.setLayoutManager(linearLayoutManager);
         }
-
-////         FOR TESTING
-//        for (int j = 0; j < 15; j++) {
-//            mListIssues.add(new GitIssue("Ahhhlvin", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et felis porttitor magna vestibulum placerat. Fusce vel iaculis quam, non suscipit nulla. Nunc commodo diam nec felis dignissim, vitae accumsan dolor pulvinar. Cras orci augue, ornare vel mauris sed, tempus cursus elit. Nullam id nisl in arcu fringilla cursus. Nullam ornare ipsum id enim gravida tincidunt. Integer eu dolor nec massa ultricies consequat. In dignissim odio quis gravida dictum. Donec accumsan fermentum diam, et molestie ligula varius eget. Nam dictum elementum tellus, et iaculis nulla scelerisque quis. Vestibulum et venenatis libero, eu commodo ante. Aenean et varius est. Suspendisse tincidunt, sem eu posuere suscipit, elit velit porttitor diam, ac porttitor magna magna et erat. Donec eleifend mauris et elit posuere scelerisque. Vivamus in commodo arcu. Proin accumsan risus nunc, quis ornare urna accumsan eget. Curabitur venenatis est vel augue dignissim, nec pellentesque mi posuere. Vestibulum consectetur nisi vel placerat scelerisque. Cras blandit luctus nibh, eget tristique ligula fermentum nec."));
-//        }
     }
 
     // Retrieves issues JSON on separate thread
-    private class getIssues extends AsyncTask<Void, Void, List<GitIssue>> {
+    private class GetDataTask extends AsyncTask<Void, Void, List<GitIssue>> {
 
         String run(String url) throws IOException {
             InputStream is = null;
