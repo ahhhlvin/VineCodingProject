@@ -14,19 +14,23 @@ import java.util.List;
  */
 public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.IssueViewHolder> {
 
+    private Context mContext;
     private List<GitIssue> mIssues;
 
-    public IssuesViewAdapter(List<GitIssue> list) {
+    public IssuesViewAdapter(Context context, List<GitIssue> list) {
+        mContext = context;
         mIssues = list;
     }
 
-    public void addIssues() {
+    public void addIssues(List<GitIssue> issues) {
+        // where do you add the data???
+        mIssues.addAll(issues);
         notifyDataSetChanged();
     }
 
     @Override
     public IssueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.issue_layout, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.issue_layout, parent, false);
         return new IssueViewHolder(v);
     }
 
@@ -44,10 +48,11 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
         return mIssues.size();
     }
 
-    public class IssueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    // I know you don't want to name it as static but RecyclerView.ViewHolder is STATIC~~~ lol
+    public static class IssueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView title;
-        public TextView body;
+        protected TextView title;
+        protected TextView body;
 
         public IssueViewHolder(View v) {
             super(v);
@@ -58,21 +63,16 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
 
         @Override
         public void onClick(View v) {
-            // For testing purposes
-//            Log.d("DEBUG_TAG", "ITEM " + getAdapterPosition() + " HAS BEEN CLICKED");
             AlertDialog.Builder commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
-            commentsBuilder.setCancelable(true);
-
+            String message = "";
             if (mIssues.get(getAdapterPosition()).getmCommentsList().size() > 0) {
-                String message = "";
                 for (int i = 0; i < mIssues.get(getAdapterPosition()).getmCommentsList().size(); i++) {
                     message += mIssues.get(getAdapterPosition()).getmCommentsList().get(i).getmBody() + "\n";
                 }
-                commentsBuilder.setMessage(message);
             } else {
-                commentsBuilder.setMessage("No comments available for issue");
+                message = "No comments available for issue";
             }
-            commentsBuilder.create().show();
+            commentBuilder.setMessage(message).setCancelable(true).create().show();
         }
     }
 }
