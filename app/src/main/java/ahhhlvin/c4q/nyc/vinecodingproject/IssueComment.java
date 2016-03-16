@@ -5,13 +5,13 @@ package ahhhlvin.c4q.nyc.vinecodingproject;
  */
 public class IssueComment {
 
-    private String mBody;
+    String body;
 
-    public String getmBody() {
-        return mBody;
+    public String getBody() {
+        return body;
     }
 
-    public void setmBody(String body) {
-        this.mBody = body;
+    public void setBody(String body) {
+        this.body = body;
     }
 }
