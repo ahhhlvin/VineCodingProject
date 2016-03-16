@@ -17,27 +17,27 @@ public class GitIssue {
     }
 
     public GitIssue(String issueTitle, String issueBody) {
-        this.mIssueTitle = issueTitle;
-        this.mIssueBody = issueBody;
+        mIssueTitle = issueTitle;
+        mIssueBody = issueBody;
     }
 
-    public String getmIssueTitle() {
+    public String getIssueTitle() {
         return mIssueTitle;
     }
 
-    public void setmIssueTitle(String mIssueTitle) {
-        this.mIssueTitle = mIssueTitle;
+    public void setIssueTitle(String issueTitle) {
+        mIssueTitle = issueTitle;
     }
 
-    public String getmIssueBody() {
+    public String getIssueBody() {
         return mIssueBody;
     }
 
-    public void setmIssueBody(String mIssueBody) {
-        this.mIssueBody = mIssueBody;
+    public void setIssueBody(String issueBody) {
+        mIssueBody = issueBody;
     }
 
-    public List<IssueComment> getmCommentsList() {
+    public List<IssueComment> getCommentsList() {
         return mCommentsList;
     }
 }
