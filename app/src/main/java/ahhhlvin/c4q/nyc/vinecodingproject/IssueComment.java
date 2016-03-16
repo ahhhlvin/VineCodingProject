@@ -7,11 +7,11 @@ public class IssueComment {
 
     private String mBody;
 
-    public String getmBody() {
+    public String getCommentBody() {
         return mBody;
     }
 
-    public void setmBody(String body) {
+    public void setCommentBody(String body) {
         this.mBody = body;
     }
 }

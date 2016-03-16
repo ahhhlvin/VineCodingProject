@@ -103,15 +103,15 @@ public class IssuesActivity extends AppCompatActivity {
                     for (int i = 0; i < issueArray.length(); i++) {
                         JSONObject issueObj = issueArray.getJSONObject(i);
                         GitIssue issue = new GitIssue();
-                        issue.setmIssueTitle(issueObj.get("title").toString());
-                        issue.setmIssueBody(issueObj.get("body").toString() + "\n\n");
+                        issue.setIssueTitle(issueObj.get("title").toString());
+                        issue.setIssueBody(issueObj.get("body").toString() + "\n\n");
 
                         JSONArray commentsArray = new JSONArray(run(issueObj.get("comments_url").toString()));
                         if (commentsArray.length() > 0) {
                             for (int j = 0; j < commentsArray.length(); j++) {
                                 JSONObject commentObj = commentsArray.getJSONObject(j);
                                 IssueComment comment = new IssueComment();
-                                comment.setmBody("Posted by: " + commentObj.getJSONObject("user").getString("login").toUpperCase() + "\n\n" + commentObj.getString("body") + "\n\n\n");
+                                comment.setCommentBody("Posted by: " + commentObj.getJSONObject("user").getString("login").toUpperCase() + "\n\n" + commentObj.getString("body") + "\n\n\n");
                                 issue.mCommentsList.add(comment);
                             }
                         }

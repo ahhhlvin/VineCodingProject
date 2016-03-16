@@ -23,7 +23,8 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
         mContext = context;
     }
 
-    public void addIssues() {
+    public void addIssues(List<GitIssue> list) {
+        mIssues.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -36,8 +37,8 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
     @Override
     public void onBindViewHolder(IssueViewHolder holder, int position) {
         final GitIssue issueData = mIssues.get(position);
-        String issueTitle = issueData.getmIssueTitle();
-        String issueBody = issueData.getmIssueBody();
+        String issueTitle = issueData.getIssueTitle();
+        String issueBody = issueData.getIssueBody();
         holder.title.setText(issueTitle);
         holder.body.setText(issueBody);
     }
@@ -49,8 +50,8 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
 
     public class IssueViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView title;
-        public TextView body;
+        protected TextView title;
+        protected TextView body;
 
         public IssueViewHolder(View v) {
             super(v);
@@ -62,18 +63,16 @@ public class IssuesViewAdapter extends RecyclerView.Adapter<IssuesViewAdapter.Is
         @Override
         public void onClick(View v) {
             AlertDialog.Builder commentsBuilder = new AlertDialog.Builder(v.getContext(), R.style.dialog);
-            commentsBuilder.setCancelable(true);
+            String message = "";
 
-            if (mIssues.get(getAdapterPosition()).getmCommentsList().size() > 0) {
-                String message = "";
-                for (int i = 0; i < mIssues.get(getAdapterPosition()).getmCommentsList().size(); i++) {
-                    message += mIssues.get(getAdapterPosition()).getmCommentsList().get(i).getmBody() + "\n";
+            if (mIssues.get(getAdapterPosition()).getCommentsList().size() > 0) {
+                for (int i = 0; i < mIssues.get(getAdapterPosition()).getCommentsList().size(); i++) {
+                    message += mIssues.get(getAdapterPosition()).getCommentsList().get(i).getCommentBody() + "\n";
                 }
-                commentsBuilder.setMessage(message);
             } else {
-                commentsBuilder.setMessage("No comments available for issue");
+                message = "No comments available for issue";
             }
-            commentsBuilder.create().show();
+            commentsBuilder.setMessage(message).setCancelable(true).create().show();
         }
     }
 }
