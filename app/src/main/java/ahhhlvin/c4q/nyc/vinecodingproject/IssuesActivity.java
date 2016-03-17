@@ -130,7 +130,7 @@ public class IssuesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<GitIssue> list) {
             super.onPostExecute(list);
-            mAdapter.addIssues();
+            mAdapter.addIssues(list);
         }
     }
 
